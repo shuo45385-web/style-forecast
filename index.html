@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f2eb">
+  <title>款势观察室 · 拼多多服装选款</title>
+  <meta name="description" content="拼多多商品快照、款式趋势与原创试款建议。">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">款</span><div><strong>款势观察室</strong><small>STYLE SIGNAL LAB</small></div></div>
+      <div class="side-label">工作台</div>
+      <a class="nav active" href="#overview"><span>◈</span> 趋势总览</a>
+      <a class="nav" href="#styles"><span>▦</span> 款式信号</a>
+      <a class="nav" href="#candidate"><span>✳</span> 新款提案</a>
+      <a class="nav" href="#data"><span>⇧</span> 数据接入</a>
+      <div class="sidebar-bottom">
+        <div class="status-dot"></div><div><strong>原型版 · 本地数据</strong><small>导入数据仅保存在当前浏览器</small></div>
+      </div>
+    </aside>
+    <main>
+      <header class="topbar">
+        <div class="breadcrumb">研究工作台 <span>/</span> 拼多多趋势</div>
+        <div class="top-right"><span id="updatedAt">—</span><span class="avatar">研</span></div>
+      </header>
+      <div class="content">
+        <section id="overview" class="hero">
+          <div class="eyebrow"><span class="eyebrow-line"></span> MARKET INTELLIGENCE · 01</div>
+          <h1>从市场信号，<br><em>推演下一款。</em></h1>
+          <p>调用拼多多开放平台商品搜索接口按日期观察同类商品变化，把累计销量差分成速度，拆解版型、颜色和纹样，再组合一款尚未上架的试款方向。</p>
+          <div class="hero-decoration">势</div>
+        </section>
+
+        <div id="modeBanner" class="mode-banner" role="status"></div>
+
+        <section class="control-panel" aria-label="分析条件">
+          <div class="control-heading"><div><span class="section-kicker">01 / 查询条件</span><h2>定义这次观察</h2></div><div class="mode-switch" role="group" aria-label="数据模式"><button id="demoMode" class="selected" type="button">演示数据</button><button id="realMode" type="button">我的数据</button></div></div>
+          <div class="controls">
+            <label>商品关键词<input id="keyword" value="汉服" placeholder="例如：汉服"></label>
+            <label>地区<input id="region" value="山东" placeholder="例如：山东"></label>
+            <label>地区判断依据<select id="basis"><option value="made_region">实际生产地</option><option value="any">不限地区</option><option value="item_region">商品所在地</option><option value="seller_region">卖家所在地</option><option value="ship_region">发货地</option></select></label>
+            <button class="primary-btn" id="analyzeBtn" type="button">重新分析 <span>↗</span></button>
+          </div>
+          <p class="hint">商品搜索接口不返回地区字段，按地区分析需先凭证据维护产地映射，或选「不限地区」。“山东生产”只匹配另有证据核实的生产地。</p>
+        </section>
+
+        <section class="metrics" aria-label="数据概览">
+          <div class="metric"><span>覆盖商品</span><strong id="itemCount">—</strong><small>按 goods_sign 去重</small></div>
+          <div class="metric"><span>历史快照</span><strong id="snapshotCount">—</strong><small>同一商品跨日期观察</small></div>
+          <div class="metric"><span>可计算趋势</span><strong id="eligibleCount">—</strong><small>至少 3 次观察且跨度 7 天</small></div>
+          <div class="metric"><span>近 30 天销量可算</span><strong id="sales30Count">—</strong><small>需 30±3 天前的快照</small></div>
+        </section>
+
+        <section class="analysis-grid">
+          <article class="card chart-card"><div class="card-head"><div><span class="section-kicker">02 / 时间观察</span><h2>样本销量指标走势</h2></div><span class="pill" id="chartBasis">—</span></div><div id="trendChart" class="chart"></div><p class="chart-note">上图是接口原值（累计已售件数），下图是用相隔约 30 天的两次快照相减得出的近 30 天实际成交件数。攒满 30 天历史后才会出现下图。</p></article>
+          <article class="card source-card"><div class="card-head"><div><span class="section-kicker">数据质量</span><h2>先看清数据范围</h2></div></div><div class="source-list"><div><span class="source-icon red">拼</span><div><strong>多多进宝商品搜索</strong><small>pdd.ddk.goods.search · 累计已售件数</small></div><b id="pddSource">0 条</b></div><div><span class="source-icon orange">档</span><div><strong>分档销量样本</strong><small>如 1万+，只统计档位是否上移</small></div><b id="bucketSource">0 件</b></div></div><div class="quality-note" id="qualityNote">尚无可用于真实预测的导入数据。</div></article>
+        </section>
+
+        <section id="styles" class="card styles-card"><div class="card-head"><div><span class="section-kicker">03 / 款式信号</span><h2>观察到的品类方向</h2></div><span class="muted">按样本内趋势排序</span></div><div class="table-wrap"><table><thead><tr><th>款式</th><th>样本商品</th><th>近 30 天销量</th><th>样本销量变化</th><th>样本评分</th></tr></thead><tbody id="styleRows"></tbody></table></div><p class="table-note">销量变化按累计值差分出的每日新增速度比较后半段与前半段（至少 3 次观察、跨度 7 天）；标 ≈ 的行含分档销量，精度有限；完全分档且档位未动的款式只给出「档位上移 n/m」比例，算作半份证据。评分结合这一变化、样本内销量位置及历史覆盖率，不是爆款概率，也不代表全平台市场份额。</p></section>
+
+        <section id="candidate" class="candidate-section"><div class="candidate-head"><div><span class="section-kicker">04 / 原创新款提案</span><h2>从热度元素中，组合新设计</h2></div><span class="candidate-label">待打样 · 需验证</span></div><div class="candidate-layout"><div class="candidate-visual" id="candidateVisual"><img src="./assets/hanfu-concept.png" alt="秋冬改良袄裙示例设计图，展示正面和背面"><span>示例设计图 · 与动态评分不自动同步</span></div><div class="candidate-copy"><span class="candidate-overline">DESIGN HYPOTHESIS 01</span><h3 id="candidateTitle">—</h3><p id="candidateReason">导入商品快照后生成款式组合。</p><div class="tag-row" id="candidateTags"></div><div class="divider"></div><div class="prompt-head"><strong>设计图提示词</strong><button id="copyPrompt" type="button">复制 ↗</button></div><p class="prompt" id="candidatePrompt">—</p><p class="candidate-disclaimer">推荐是样本中的新品假设。打样前仍需核对现货相似款、面料、成本和图案版权。</p></div></div></section>
+
+        <section id="data" class="data-grid"><div class="card import-card"><span class="section-kicker">05 / 数据接入</span><h2>同步采集与导入</h2><p>本机采集程序调用拼多多开放平台接口按日期保存商品快照。同一商品每天一条，攒够历史后才能差分出速度和近 30 天销量。打开本机服务时自动读取，也可以手动同步。</p><div class="data-actions"><button id="syncBtn" type="button">同步本机采集</button></div><div class="upload-box"><div class="upload-icon">⇧</div><strong>导入 CSV 商品快照</strong><span>平台列填 pinduoduo；单次文件建议小于 5 MB</span><label class="upload-button">选择 CSV 文件<input id="csvFile" type="file" accept=".csv,text/csv" hidden></label></div><div class="data-actions"><button id="templateBtn" type="button">下载空白模板</button><button id="exportBtn" type="button">导出已存数据</button><button id="clearBtn" type="button">清空已存数据</button></div><div id="importMessage" class="import-message" role="status"></div></div><div class="card fields-card"><span class="section-kicker">字段说明</span><h2>采集口径</h2><dl><div><dt>接口</dt><dd>多多进宝 pdd.ddk.goods.search；关键词、拼单价（分转元）与 sales_tip 累计已售件数，不返回地区字段</dd></div><div><dt>销量口径</dt><dd>累计件数写入 sales_total；分档值（如 1万+）标记 sales_exact=0。近 30 天销量与速度变化都由跨日期差分得出</dd></div><div><dt>地区</dt><dd>接口无地区字段。实际生产地需凭证核实并维护映射表，不能用店铺名或发货地代替</dd></div></dl><div class="phase-note"><strong>自动采集状态</strong><p>已提供调用拼多多开放平台的服务端定时采集程序；需要多多进宝应用的 client_id、client_secret 和推广位 pid 才能实际运行。当前无平台凭据，未产生真实平台数据，签名与字段名仍待真实响应核对。若真实响应里带数值销量字段，采集程序会优先按精确值采用。</p></div></div></section>
+        <footer>款势观察室 · 原型版　<span>数据仅在当前浏览器保存 · 演示数据均为模拟</span></footer>
+      </div>
+    </main>
+  </div>
+  <script defer src="./bundle.js"></script>
+</body>
+</html>
